@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Pre-analysis for three datasets</title>
+<!-- 2018-05-04 Fri 19:54 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Xin Gao" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
+<style> #content {max-width:1200px; }</style>
+<style>.org-src-name {text-decoration: underline; font-style: italic; font-family: monospace;  border-left: 1em solid Yellow; }</style>
+<script type='text/javascript' class="init">
+$(document).ready(function() {
+$('.org-src-name').on("click.xxxx",(function(e){
+$(this).next('.src').slideToggle();
+}));
+//   $('.org-src-name').click(function(e){
+//    });
+// allow to individually toggles src listing by clicking on its #+CAPTION (ASSUMING it has one).
+// alert('ready');
+$(document).keyup(function(e){
+switch(e.keyCode){
+// display/hide ALL source code listings on key y/alt-y (chosen to: (1) agree with 'yellow' (2) not conflict with +INFOJS_OPT keybindings).
+case 89 : if (e.altKey) {$('.src').slideUp()} else {$('.src').slideDown()} ; break;
+}
+});
+$('table').stickyTableHeaders();
+$('table th').css('background-color', 'white'); // opaque - better when "sticky".
+//   $('table').addClass("DataTable");  // export ALL tables as dataTable.
+//   $('div.org-results-container table [contains="adataTable"]).addClass("DataTable");
+$('.DataTable').addClass("compact display"); // use these by default across the board!
+$('.DataTable').css('display', 'block'); // compresses column widths (alas not table width)
+$('.DataTable').dataTable({
+"stripeClasses": [ 'strip1', 'strip2', 'strip3' ], // class: display, //
+"autoWidth": true,
+scrollX: true,
+scrollCollapse: true,
+"dom": 'RClfrtip', //T<clear>lfrtip',
+"oTableTools": { "sSwfPath": "http://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls_pdf.swf" },
+"LengthChange": true,
+"pagingType": "full_numbers",
+"aLengthMenu": [[10, 100, 1000, -1],
+[10, 100, 1000, "All"]]
+});
+$("div.afterTable").html('<hr>');
+} );
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Pre-analysis for three datasets</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Mammary gland epithlial cells GSE103272</a>
+<ul>
+<li><a href="#sec-1-1">1.1. P7D diestrus</a></li>
+<li><a href="#sec-1-2">1.2. P7E estrus</a></li>
+<li><a href="#sec-1-3">1.3. P7 combined</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. IFN-beta-stimulated PBMCs GSE96583</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Single sample</a></li>
+<li><a href="#sec-2-2">2.2. Combined sample</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. PBMCs</a>
+<ul>
+<li><a href="#sec-3-1">3.1. PBMC 4K</a></li>
+<li><a href="#sec-3-2">3.2. PBMC 8K</a></li>
+<li><a href="#sec-3-3">3.3. PBMC Combined</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Mammary gland epithlial cells GSE103272</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+estrus (2729 cells) and diestrus (2439 cells) 
+</p>
+
+<p>
+<a href="https://www.nature.com/articles/s41467-017-01560-x">https://www.nature.com/articles/s41467-017-01560-x</a>
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> P7D diestrus</h3>
+<div class="outline-text-3" id="text-1-1">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+p7d.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"GSE103272/P7D/filtered_gene_bc_matrices"</span>)
+
+p7d <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = p7d.data, min.cells = 3, min.genes=200)
+mito.genes <span style="color: #008b8b;">&lt;-</span> grep(pattern = <span style="color: #8b2252;">"^Mt"</span>, x = rownames(x = p7d@data), value = <span style="color: #228b22;">TRUE</span>)
+percent.mito <span style="color: #008b8b;">&lt;-</span> Matrix::colSums(p7d@raw.data[mito.genes, ])/Matrix::colSums(p7d@raw.data)
+p7d <span style="color: #008b8b;">&lt;-</span> AddMetaData(object = p7d, metadata = percent.mito, col.name = <span style="color: #8b2252;">"percent.mito"</span>)
+VlnPlot(object = p7d, features.plot = c(<span style="color: #8b2252;">"nGene"</span>, <span style="color: #8b2252;">"nUMI"</span>, <span style="color: #8b2252;">"percent.mito"</span>), nCol = 3)
+savePlot(<span style="color: #8b2252;">'p7d.qa.png'</span>)
+p7d <span style="color: #008b8b;">&lt;-</span> NormalizeData(p7d)
+p7d <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(p7d, x.low.cutoff = 0.05, x.high.cutoff = 8, y.cutoff = 0.5)
+length(x = p7d@var.genes)<span style="color: #b22222;">## </span><span style="color: #b22222;">1406</span>
+savePlot(<span style="color: #8b2252;">'p7d.var.gene.png'</span>)
+p7d <span style="color: #008b8b;">&lt;-</span> ScaleData(p7d, genes.use = p7d@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>,<span style="color: #8b2252;">"percent.mito"</span>))
+p7d <span style="color: #008b8b;">&lt;-</span> RunPCA(p7d, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = p7d)
+savePlot(<span style="color: #8b2252;">'p7d.pce.png'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+p7d <span style="color: #008b8b;">&lt;-</span> FindClusters(p7d, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:8, resolution=0.8, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>)
+p7d <span style="color: #008b8b;">&lt;-</span> RunTSNE(p7d, dims.use = 1:8, do.fast = T)
+TSNEPlot(object = p7d, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">'P7D'</span>)
+savePlot(<span style="color: #8b2252;">'p7d.tsne.png'</span>)
+saveRDS(p7d, file = <span style="color: #8b2252;">"p7d.RDS"</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindAllMarkers</span>
+p7d.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = p7d, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(p7d.markers,file=<span style="color: #8b2252;">'p7d.markers.csv'</span>)
+</pre>
+</div>
+
+<p>
+QA/QC
+</p>
+
+<p>
+<img src="p7d.qa.png" alt="p7d.qa.png" /> <img src="p7d.var.gene.png" alt="p7d.var.gene.png" />
+</p>
+
+<p>
+PCA
+</p>
+
+
+<div class="figure">
+<p><img src="p7d.pce.png" alt="p7d.pce.png" />
+</p>
+</div>
+
+<p>
+Clusters and markers
+</p>
+
+<p>
+<a href="p7d.markers.csv">p7d.markers.csv</a>
+</p>
+
+<p>
+Seurat object p7d.RDS
+</p>
+
+
+<div class="figure">
+<p><img src="p7d.tsne.png" alt="p7d.tsne.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> P7E estrus</h3>
+<div class="outline-text-3" id="text-1-2">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+p7e.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"GSE103272/P7E/filtered_gene_bc_matrices"</span>)
+
+p7e <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = p7e.data, min.cells = 3, min.genes=200)
+mito.genes <span style="color: #008b8b;">&lt;-</span> grep(pattern = <span style="color: #8b2252;">"^Mt"</span>, x = rownames(x = p7e@data), value = <span style="color: #228b22;">TRUE</span>)
+percent.mito <span style="color: #008b8b;">&lt;-</span> Matrix::colSums(p7e@raw.data[mito.genes, ])/Matrix::colSums(p7e@raw.data)
+p7e <span style="color: #008b8b;">&lt;-</span> AddMetaData(object = p7e, metadata = percent.mito, col.name = <span style="color: #8b2252;">"percent.mito"</span>)
+VlnPlot(object = p7e, features.plot = c(<span style="color: #8b2252;">"nGene"</span>, <span style="color: #8b2252;">"nUMI"</span>, <span style="color: #8b2252;">"percent.mito"</span>), nCol = 3)
+savePlot(<span style="color: #8b2252;">'p7e.qa.png'</span>)
+p7e <span style="color: #008b8b;">&lt;-</span> NormalizeData(p7e)
+p7e <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(p7e, x.low.cutoff = 0.05, x.high.cutoff = 8, y.cutoff = 0.5)
+length(x = p7e@var.genes)<span style="color: #b22222;">##</span><span style="color: #b22222;">1440</span>
+savePlot(<span style="color: #8b2252;">'p7e.var.gene.png'</span>)
+p7e <span style="color: #008b8b;">&lt;-</span> ScaleData(p7e, genes.use = p7e@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>,<span style="color: #8b2252;">"percent.mito"</span>))
+dim(p7e@data) <span style="color: #b22222;">## </span><span style="color: #b22222;">2728 cells</span>
+p7e <span style="color: #008b8b;">&lt;-</span> RunPCA(p7e, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = p7e)
+savePlot(<span style="color: #8b2252;">'p7e.pce.png'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+p7e <span style="color: #008b8b;">&lt;-</span> FindClusters(p7e, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:6, resolution=0.8, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>)
+p7e <span style="color: #008b8b;">&lt;-</span> RunTSNE(p7e, dims.use = 1:6, do.fast = T)
+TSNEPlot(object = p7e, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">'P7E'</span>)
+savePlot(<span style="color: #8b2252;">'p7e.tsne.png'</span>)
+saveRDS(p7e, file = <span style="color: #8b2252;">"p7e.RDS"</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindAllMarkers</span>
+p7e.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = p7e, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(p7e.markers,file=<span style="color: #8b2252;">'p7e.markers.csv'</span>)
+</pre>
+</div>
+
+<p>
+QA/QC
+</p>
+
+<p>
+<img src="p7e.qa.png" alt="p7e.qa.png" /> <img src="p7e.var.gene.png" alt="p7e.var.gene.png" />
+</p>
+
+<p>
+PCA
+</p>
+
+
+<div class="figure">
+<p><img src="p7e.pce.png" alt="p7e.pce.png" />
+</p>
+</div>
+
+<p>
+Clusters and markers
+</p>
+
+<p>
+<a href="p7e.markers.csv">p7e.markers.csv</a>
+</p>
+
+<p>
+Seurat object p7e.RDS
+</p>
+
+
+<div class="figure">
+<p><img src="p7e.tsne.png" alt="p7e.tsne.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> P7 combined</h3>
+<div class="outline-text-3" id="text-1-3">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+p7d.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"GSE103272/P7D/filtered_gene_bc_matrices"</span>)
+p7e.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"GSE103272/P7E/filtered_gene_bc_matrices"</span>)
+
+colnames(p7d.data)=paste0(<span style="color: #8b2252;">'p7d-'</span>, colnames(p7d.data))
+colnames(p7e.data)=paste0(<span style="color: #8b2252;">'p7e-'</span>, colnames(p7e.data))
+
+p7.data = cbind(p7d.data, p7e.data)
+
+p7 <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = p7.data, min.cells = 3, min.genes=200)
+mito.genes <span style="color: #008b8b;">&lt;-</span> grep(pattern = <span style="color: #8b2252;">"^Mt"</span>, x = rownames(x = p7@data), value = <span style="color: #228b22;">TRUE</span>)
+percent.mito <span style="color: #008b8b;">&lt;-</span> Matrix::colSums(p7@raw.data[mito.genes, ])/Matrix::colSums(p7@raw.data)
+p7 <span style="color: #008b8b;">&lt;-</span> AddMetaData(object = p7, metadata = percent.mito, col.name = <span style="color: #8b2252;">"percent.mito"</span>)
+VlnPlot(object = p7, features.plot = c(<span style="color: #8b2252;">"nGene"</span>, <span style="color: #8b2252;">"nUMI"</span>, <span style="color: #8b2252;">"percent.mito"</span>), nCol = 3)
+savePlot(<span style="color: #8b2252;">'p7.qa.png'</span>)
+p7 <span style="color: #008b8b;">&lt;-</span> NormalizeData(p7)
+p7 <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(p7, x.low.cutoff = 0.05, x.high.cutoff = 8, y.cutoff = 0.5)
+length(x = p7@var.genes)<span style="color: #b22222;">##</span><span style="color: #b22222;">1218</span>
+savePlot(<span style="color: #8b2252;">'p7.var.gene.png'</span>)
+p7 <span style="color: #008b8b;">&lt;-</span> ScaleData(p7, genes.use = p7@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>,<span style="color: #8b2252;">"percent.mito"</span>))
+p7 <span style="color: #008b8b;">&lt;-</span> RunPCA(p7, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = p7)
+savePlot(<span style="color: #8b2252;">'p7.pce.png'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+p7 <span style="color: #008b8b;">&lt;-</span> FindClusters(p7, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:8, resolution=0.6, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>)
+p7 <span style="color: #008b8b;">&lt;-</span> RunTSNE(p7, dims.use = 1:8, do.fast = T)
+TSNEPlot(object = p7, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">'P7 Combined'</span>)
+savePlot(<span style="color: #8b2252;">'p7.tsne.png'</span>)
+saveRDS(p7, file = <span style="color: #8b2252;">"p7.RDS"</span>)
+</pre>
+</div>
+
+<p>
+QA/QC
+</p>
+
+<p>
+<img src="p7.qa.png" alt="p7.qa.png" /> <img src="p7.var.gene.png" alt="p7.var.gene.png" />
+</p>
+
+<p>
+PCA
+</p>
+
+
+<div class="figure">
+<p><img src="p7.pce.png" alt="p7.pce.png" />
+</p>
+</div>
+
+<p>
+Clusters 
+</p>
+
+<p>
+Seurat object p7.RDS
+</p>
+
+
+<div class="figure">
+<p><img src="p7.tsne.png" alt="p7.tsne.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> IFN-beta-stimulated PBMCs GSE96583</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<a href="https://www.nature.com/articles/nbt.4042">https://www.nature.com/articles/nbt.4042</a>
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Single sample</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+ctrl.data <span style="color: #008b8b;">&lt;-</span> read.table(<span style="color: #8b2252;">"GSE96583/immune_control_expression_matrix.txt"</span>, sep = <span style="color: #8b2252;">"\t"</span>)
+stim.data <span style="color: #008b8b;">&lt;-</span> read.table(<span style="color: #8b2252;">"GSE96583/immune_stimulated_expression_matrix.txt"</span>, sep = <span style="color: #8b2252;">"\t"</span>)
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">Set up control object</span>
+ctrl <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = ctrl.data, project = <span style="color: #8b2252;">"IMMUNE_CTRL"</span>, min.cells = 5)
+ctrl@meta.data$stim <span style="color: #008b8b;">&lt;-</span> <span style="color: #8b2252;">"CTRL"</span>
+ctrl <span style="color: #008b8b;">&lt;-</span> FilterCells(ctrl, subset.names = <span style="color: #8b2252;">"nGene"</span>, low.thresholds = 500, high.thresholds = <span style="color: #228b22;">Inf</span>)
+ctrl <span style="color: #008b8b;">&lt;-</span> NormalizeData(ctrl)
+ctrl <span style="color: #008b8b;">&lt;-</span> ScaleData(ctrl, display.progress = F)
+<span style="color: #b22222;"># </span><span style="color: #b22222;">Set up stimulated object</span>
+stim <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = stim.data, project = <span style="color: #8b2252;">"IMMUNE_STIM"</span>, min.cells = 5)
+stim@meta.data$stim <span style="color: #008b8b;">&lt;-</span> <span style="color: #8b2252;">"STIM"</span>
+stim <span style="color: #008b8b;">&lt;-</span> FilterCells(stim, subset.names = <span style="color: #8b2252;">"nGene"</span>, low.thresholds = 500, high.thresholds = <span style="color: #228b22;">Inf</span>)
+stim <span style="color: #008b8b;">&lt;-</span> NormalizeData(stim)
+stim <span style="color: #008b8b;">&lt;-</span> ScaleData(stim, display.progress = F)
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">Gene selection </span>
+ctrl <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(ctrl, do.plot = F)
+stim <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(stim, do.plot = F)
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">t-SNE and Clustering</span>
+ctrl <span style="color: #008b8b;">&lt;-</span> RunPCA(ctrl,do.print = <span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = ctrl)
+savePlot(<span style="color: #8b2252;">'ctrl.pce.png'</span>)
+ctrl <span style="color: #008b8b;">&lt;-</span> FindClusters(ctrl, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:15, resolution=0.6, save.SNN =T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>,print.output = <span style="color: #228b22;">FALSE</span>)
+ctrl <span style="color: #008b8b;">&lt;-</span> RunTSNE(ctrl, dims.use = 1:15, do.fast = T)
+TSNEPlot(object = ctrl, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">"Control"</span>)
+savePlot(<span style="color: #8b2252;">'ctrl.tsne.png'</span>)
+saveRDS(ctrl,file=<span style="color: #8b2252;">'ctrl.RDS'</span>)
+
+stim <span style="color: #008b8b;">&lt;-</span> RunPCA(stim,do.print = <span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = stim)
+savePlot(<span style="color: #8b2252;">'stim.pce.png'</span>)
+stim <span style="color: #008b8b;">&lt;-</span> FindClusters(stim, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:15, resolution=0.6, save.SNN =T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span> ,print.output = <span style="color: #228b22;">FALSE</span>)
+stim <span style="color: #008b8b;">&lt;-</span> RunTSNE(stim, dims.use = 1:15, do.fast = T)
+TSNEPlot(object = stim, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">"Stimulated"</span>)
+savePlot(<span style="color: #8b2252;">'stim.tsne.png'</span>)
+saveRDS(stim,file=<span style="color: #8b2252;">'stim.RDS'</span>)
+
+<span style="color: #b22222;"># </span><span style="color: #b22222;">Find markers</span>
+ctrl.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = ctrl, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(ctrl.markers,file=<span style="color: #8b2252;">'ctrl.markers.csv'</span>)
+
+stim.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = stim, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(stim.markers,file=<span style="color: #8b2252;">'stim.markers.csv'</span>)
+</pre>
+</div>
+
+<p>
+PCA
+</p>
+
+<p>
+<img src="ctrl.pce.png" alt="ctrl.pce.png" /> <img src="stim.pce.png" alt="stim.pce.png" />
+</p>
+
+<p>
+Clustering and Markers
+</p>
+
+<p>
+<img src="ctrl.tsne.png" alt="ctrl.tsne.png" /> <img src="stim.tsne.png" alt="stim.tsne.png" />
+</p>
+
+<p>
+<a href="ctrl.makers.csv">ctrl.makers.csv</a> 
+<a href="stim.markers.csv">stim.markers.csv</a>
+</p>
+
+<p>
+Seurat objects ctrl.RDS and stim.RDS
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Combined sample</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+ctrl.data <span style="color: #008b8b;">&lt;-</span> read.table(<span style="color: #8b2252;">"GSE96583/immune_control_expression_matrix.txt"</span>, sep = <span style="color: #8b2252;">"\t"</span>)
+stim.data <span style="color: #008b8b;">&lt;-</span> read.table(<span style="color: #8b2252;">"GSE96583/immune_stimulated_expression_matrix.txt"</span>, sep = <span style="color: #8b2252;">"\t"</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">Combined </span>
+colnames(ctrl.data)<span style="color: #008b8b;">&lt;-</span>paste(<span style="color: #8b2252;">"ctrl"</span>, colnames(ctrl.data), sep=<span style="color: #8b2252;">"-"</span>)
+colnames(stim.data)<span style="color: #008b8b;">&lt;-</span>paste(<span style="color: #8b2252;">"stim"</span>, colnames(stim.data), sep=<span style="color: #8b2252;">"-"</span>)
+
+immune.data <span style="color: #008b8b;">&lt;-</span>cbind(stim.data, ctrl.data)
+
+immune <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = immune.data, project = <span style="color: #8b2252;">"IMMUNE"</span>, min.cells = 5)
+immune <span style="color: #008b8b;">&lt;-</span> FilterCells(immune, subset.names = <span style="color: #8b2252;">"nGene"</span>, low.thresholds = 500, high.thresholds = <span style="color: #228b22;">Inf</span>)
+immune <span style="color: #008b8b;">&lt;-</span> NormalizeData(immune)
+immune <span style="color: #008b8b;">&lt;-</span> ScaleData(immune, display.progress = F)
+immune <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(immune, do.plot = F)
+immune <span style="color: #008b8b;">&lt;-</span> RunPCA(immune,do.print = <span style="color: #228b22;">FALSE</span>)
+immune <span style="color: #008b8b;">&lt;-</span> FindClusters(immune, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:15, resolution=0.6, save.SNN =T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span> ,print.output = <span style="color: #228b22;">FALSE</span>)
+immune <span style="color: #008b8b;">&lt;-</span> RunTSNE(immune, dims.use = 1:15, do.fast = T)
+TSNEPlot(object = immune, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">"Immune Combined"</span>)
+savePlot(<span style="color: #8b2252;">'immune.tsne.png'</span>)
+saveRDS(immune,file=<span style="color: #8b2252;">'immune.RDS'</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="immune.tsne.png" alt="immune.tsne.png" />
+</p>
+</div>
+
+<p>
+Seurat objects immune.RDS
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> PBMCs</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The dataset is downloaded from 10X Genomics single cell gene expression datasets:
+</p>
+
+<p>
+<a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k">https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k</a>
+</p>
+
+<p>
+<a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc8k">https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc8k</a>
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> PBMC 4K</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+pbmc4k.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"PBMCs/pbmc4k/filtered_gene_bc_matrices/GRCh38"</span>)
+
+pbmc4k <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = pbmc4k.data, min.cells = 3, min.genes=200)
+pbmc4k <span style="color: #008b8b;">&lt;-</span> NormalizeData(pbmc4k)
+pbmc4k <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(pbmc4k, x.low.cutoff = 0.05, x.high.cutoff = 8, y.cutoff = 0.5)
+length(pbmc4k@var.genes) <span style="color: #b22222;">## </span><span style="color: #b22222;">1106</span>
+pbmc4k <span style="color: #008b8b;">&lt;-</span> ScaleData(pbmc4k, genes.use = pbmc4k@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>))
+pbmc4k <span style="color: #008b8b;">&lt;-</span> RunPCA(pbmc4k, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = pbmc4k)
+savePlot(<span style="color: #8b2252;">'pbmc4k.pce.png'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+pbmc4k <span style="color: #008b8b;">&lt;-</span> FindClusters(pbmc4k, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:9, resolution=0.8, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>, k.param=15,k.scale=15)
+pbmc4k <span style="color: #008b8b;">&lt;-</span> RunTSNE(pbmc4k, dims.use = 1:9, do.fast = T)
+TSNEPlot(object = pbmc4k, do.label = T, label.size = 6, plot.title=<span style="color: #8b2252;">'PBMC 4K'</span>)
+savePlot(<span style="color: #8b2252;">'pbmc4k.tsne.png'</span>)
+saveRDS(pbmc4k, file = <span style="color: #8b2252;">"pbmc4k.RDS"</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindAllMarkers</span>
+pbmc4k.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = pbmc4k, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(pbmc4k.markers,file=<span style="color: #8b2252;">'pbmc4k.markers.csv'</span>)
+</pre>
+</div>
+
+<p>
+Clustering and Markers
+</p>
+
+
+<div class="figure">
+<p><img src="pbmc4k.tsne.png" alt="pbmc4k.tsne.png" />
+</p>
+</div>
+
+<p>
+<a href="pbmc4k.markers.csv">pbmc4k.markers.csv</a>
+</p>
+
+<p>
+Seurat object pbmc4k.RDS
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> PBMC 8K</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/data/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+pbmc8k.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"PBMCs/pbmc8k/filtered_gene_bc_matrices/GRCh38"</span>)
+
+pbmc8k <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = pbmc8k.data, min.cells = 3, min.genes=200)
+pbmc8k <span style="color: #008b8b;">&lt;-</span> NormalizeData(pbmc8k)
+pbmc8k <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(pbmc8k, x.low.cutoff = 0.01, x.high.cutoff = 8, y.cutoff = 0.5)
+length(x = pbmc8k@var.genes)<span style="color: #b22222;">##</span><span style="color: #b22222;">1497</span>
+pbmc8k <span style="color: #008b8b;">&lt;-</span> ScaleData(pbmc8k, genes.use = pbmc8k@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>))
+pbmc8k <span style="color: #008b8b;">&lt;-</span> RunPCA(pbmc8k, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = pbmc8k)
+savePlot(<span style="color: #8b2252;">'pbmc8k.pce.png'</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+pbmc8k <span style="color: #008b8b;">&lt;-</span> FindClusters(pbmc8k, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:9, resolution=0.6, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>)
+pbmc8k <span style="color: #008b8b;">&lt;-</span> RunTSNE(pbmc8k, dims.use = 1:9, do.fast = T)
+TSNEPlot(object = pbmc8k, do.label = T, label.size = 6)
+savePlot(<span style="color: #8b2252;">'pbmc8k.tsne.png'</span>)
+saveRDS(pbmc8k, file = <span style="color: #8b2252;">"pbmc8k.RDS"</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindAllMarkers</span>
+pbmc8k.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = pbmc8k, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(pbmc8k.markers,file=<span style="color: #8b2252;">'pbmc8k.markers.csv'</span>)
+</pre>
+</div>
+
+<p>
+Clustering and Markers
+</p>
+
+
+<div class="figure">
+<p><img src="pbmc8k.tsne.png" alt="pbmc8k.tsne.png" />
+</p>
+</div>
+
+<p>
+<a href="pbmc8k.markers.csv">pbmc8k.markers.csv</a>
+</p>
+
+<p>
+Seurat object pbmc8k.RDS
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> PBMC Combined</h3>
+<div class="outline-text-3" id="text-3-3">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">setwd(<span style="color: #8b2252;">'/n/core/Bioinformatics/analysis/CompBio/cbio.xig.103/package_v2'</span>)
+
+<span style="color: #008b8b;">library</span>(Seurat)
+
+pbmc4k.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"PBMCs/pbmc4k/filtered_gene_bc_matrices/GRCh38"</span>)
+pbmc8k.data <span style="color: #008b8b;">&lt;-</span> Read10X(data.dir = <span style="color: #8b2252;">"PBMCs/pbmc8k/filtered_gene_bc_matrices/GRCh38"</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">Combined </span>
+colnames(pbmc4k.data)<span style="color: #008b8b;">&lt;-</span>paste(<span style="color: #8b2252;">"pbmc4k"</span>, colnames(pbmc4k.data), sep=<span style="color: #8b2252;">"-"</span>)
+colnames(pbmc8k.data)<span style="color: #008b8b;">&lt;-</span>paste(<span style="color: #8b2252;">"pbmc8k"</span>, colnames(pbmc8k.data), sep=<span style="color: #8b2252;">"-"</span>)
+
+pbmc.data <span style="color: #008b8b;">&lt;-</span>cbind(pbmc4k.data, pbmc8k.data)
+
+pbmc <span style="color: #008b8b;">&lt;-</span> CreateSeuratObject(raw.data = pbmc.data, min.cells = 3, min.genes=200)
+pbmc <span style="color: #008b8b;">&lt;-</span> NormalizeData(pbmc)
+pbmc <span style="color: #008b8b;">&lt;-</span> FindVariableGenes(pbmc, x.low.cutoff = 0.01, x.high.cutoff = 8, y.cutoff = 0.5)
+length(x = pbmc@var.genes)<span style="color: #b22222;">##</span><span style="color: #b22222;">1434</span>
+pbmc <span style="color: #008b8b;">&lt;-</span> ScaleData(pbmc, genes.use = pbmc@var.genes, vars.to.regress = c(<span style="color: #8b2252;">"nUMI"</span>))
+pbmc <span style="color: #008b8b;">&lt;-</span> RunPCA(pbmc, pcs.compute = 20, weight.by.var = <span style="color: #228b22;">FALSE</span>,do.print=<span style="color: #228b22;">FALSE</span>)
+PCElbowPlot(object = pbmc)
+savePlot(<span style="color: #8b2252;">'pbmc.pce.png'</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FindClusters</span>
+pbmc <span style="color: #008b8b;">&lt;-</span> FindClusters(pbmc, reduction.type = <span style="color: #8b2252;">"pca"</span>, dims.use = 1:9, resolution=0.6, save.SNN = T,temp.file.location=<span style="color: #8b2252;">"."</span>,force.recalc = <span style="color: #228b22;">TRUE</span>)
+pbmc <span style="color: #008b8b;">&lt;-</span> RunTSNE(pbmc, dims.use = 1:9, do.fast = T)
+TSNEPlot(object = pbmc, do.label = T, label.size = 6)
+savePlot(<span style="color: #8b2252;">'pbmc.tsne.png'</span>)
+saveRDS(pbmc, file = <span style="color: #8b2252;">"pbmc.RDS"</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="pbmc.tsne.png" alt="pbmc.tsne.png" />
+</p>
+</div>
+
+<p>
+Seurat object pbmc.RDS  
+</p>
+
+
+<p>
+R version 3.4.3 (2017-11-30)
+</p>
+
+<p>
+Seurat_2.2.1
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Xin Gao</p>
+<p class="date">Created: 2018-05-04 Fri 19:54</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.4 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
