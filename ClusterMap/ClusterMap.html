@@ -1,8 +1,2409 @@
----
-layout: default
-title: xgaoo
----
-<div class="blurb">
-	<h1>Welcome to ClusterMap!</h1>
-	<p>Coming soon.</p>
-</div><!-- /.blurb -->
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>ClusterMap - Compare multiple Single cell RNA-seq profiling</title>
+<!-- 2018-05-22 Tue 18:03 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Xin Gao" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
+<style> #content {max-width:1200px; }</style>
+<style> p {text-indent:20px; }</style>
+<style> pre.src {background-color:#f3f6f6; font-size:90%}</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<style>.org-src-name {text-decoration: underline; font-style: italic; font-family: monospace;  border-left: 1em solid Yellow; }</style>
+<script type='text/javascript' class="init">
+$(document).ready(function() {
+$('.org-src-name').on("click.xxxx",(function(e){
+$(this).next('.src').slideToggle();
+}));
+//   $('.org-src-name').click(function(e){
+//    });
+// allow to individually toggles src listing by clicking on its #+CAPTION (ASSUMING it has one).
+// alert('ready');
+$(document).keyup(function(e){
+switch(e.keyCode){
+// display/hide ALL source code listings on key y/alt-y (chosen to: (1) agree with 'yellow' (2) not conflict with +INFOJS_OPT keybindings).
+case 89 : if (e.altKey) {$('.src').slideUp()} else {$('.src').slideDown()} ; break;
+}
+});
+$('table').stickyTableHeaders();
+$('table th').css('background-color', 'white'); // opaque - better when "sticky".
+//   $('table').addClass("DataTable");  // export ALL tables as dataTable.
+//   $('div.org-results-container table [contains="adataTable"]).addClass("DataTable");
+$('.DataTable').addClass("compact display"); // use these by default across the board!
+$('.DataTable').css('display', 'block'); // compresses column widths (alas not table width)
+$('.DataTable').dataTable({
+"stripeClasses": [ 'strip1', 'strip2', 'strip3' ], // class: display, //
+"autoWidth": true,
+scrollX: true,
+scrollCollapse: true,
+"dom": 'RClfrtip', //T<clear>lfrtip',
+"oTableTools": { "sSwfPath": "http://cdn.datatables.net/tabletools/2.2.4/swf/copy_csv_xls_pdf.swf" },
+"LengthChange": true,
+"pagingType": "full_numbers",
+"aLengthMenu": [[10, 100, 1000, -1],
+[10, 100, 1000, "All"]]
+});
+$("div.afterTable").html('<hr>');
+} );
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">ClusterMap - Compare multiple Single cell RNA-seq profiling</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Introduction</a></li>
+<li><a href="#sec-2">2. Guide</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Quick start</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1. Simple run</a></li>
+<li><a href="#sec-2-1-2">2.1.2. Full run</a></li>
+<li><a href="#sec-2-1-3">2.1.3. Known markers</a></li>
+<li><a href="#sec-2-1-4">2.1.4. Marker genes of new groups</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">2.2. More options</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1. Try different singleton cutoff for cluster match.</a></li>
+<li><a href="#sec-2-2-2">2.2.2. Use cell number information to generate circos plot.</a></li>
+<li><a href="#sec-2-2-3">2.2.3. Change colors in circos plot</a></li>
+<li><a href="#sec-2-2-4">2.2.4. Recolor one single sample in t-SNE plot</a></li>
+<li><a href="#sec-2-2-5">2.2.5. Recolor combined sample in t-SNE plot</a></li>
+<li><a href="#sec-2-2-6">2.2.6. Adjust K for seperability</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">3. More case study</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Immune stimulated datasets</a></li>
+<li><a href="#sec-3-2">3.2. PBMCs datasets</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. Simulated data</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+ClusterMap is designed to analyze and compare two or more single cell expression datasets.
+ClusterMap suppose that the analysis for each single dataset and combined dataset are done. 
+If not, the package also provides quick analysis function "make_single_obj" and "make_comb_obj" to generate Seurat object.
+</p>
+
+<p>
+The pre-analysis for the following datasets is here: <a href="pre_analysis/pre_analysis.html">pre_analysis/pre_analysis.html</a>
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Guide</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Quick start</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+The epithelial cell datasets were generated in the study of Pal B, et al.(<a href="https://www.nature.com/articles/s41467-017-01560-x">https://www.nature.com/articles/s41467-017-01560-x</a>). 
+Cells were collected from mammary glands of adult mice at different phases of the estrus cycle. 
+By pooling the glands from two mice, scRNA-seq of 2729 total epithelial cells in estrus and 2439 cells in diestrus were performed using the 10X Chromium platform.
+</p>
+
+<p>
+<b>Pre-analysis by Seruat</b>
+</p>
+
+<p>
+Analysis were performed with Seruat package. 13 sub-groups of diestrus stage cells and 10 sub-groups of estrus stage cells were defined,
+ as well as the maker genes of each group.
+</p>
+
+<p>
+<img src="pre_analysis/p7d.tsne.png" alt="p7d.tsne.png" />
+<img src="pre_analysis/p7e.tsne.png" alt="p7e.tsne.png" />
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> Simple run</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+First, use a list of marker genes of each sub-group in each sample to map sub-groups across samples.
+The marker gene file can be the direct output of "FindAllMarkers" of Seruat package, 
+or can be a table with columns of "cluster" and "gene".<br  />
+The "edge_cutoff" can be adjust to decide if a singleton should be merged with a paired groups or not. 
+See "2.2 More options"
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(ClusterMap)
+
+marker_file_list <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.markers.csv'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.markers.csv'</span>)
+
+res <span style="color: #008b8b;">&lt;-</span> cluster_map(marker_file_list, edge_cutoff = 0.1, output = <span style="color: #8b2252;">'p7'</span>)
+res
+</pre>
+</div>
+
+<p>
+By calling "cluster_map", the mapped sub-groups information can be generate as the following 
+figures and table. They are auto-saved.
+</p>
+
+<p>
+<b>Cluster match</b>
+</p>
+
+<p>
+<i>Hierachical clustering:</i>
+</p>
+
+<p>
+The sub-groups were matched by hierarchical clustering.
+The distance between the sub-groups across the samples were determined by the existence of the marker genes in each group.
+The union of all marker genes were considered together. 
+The sub-groups of each sample were clustered by the averaged binary distance of the existence of the marker genes. <br  />
+The similarity of the matched groups is defined as 1 minus the height of the merging node of the matched groups in the dendragram.
+</p>
+
+
+<p>
+<i>Tree cut:</i>
+</p>
+
+<p>
+We search through all the nodes in the dendragram from the bottom. 
+If all the offspring nodes of a node are from the same sample, the node is considered as a pure node.
+For a given node N with two direct sub-nodes n1 and n2, N will be kept only under three conditions: 
+</p>
+<ul class="org-ul">
+<li>n1 and n2 are both singleton or pure. <br  />
+</li>
+<li>n1 is singleton or pure, AND n2 is not removed, AND the edge between N and n2 is smaller than the cutoff.<br  />
+</li>
+<li>none of n1 or n2 is cut, AND none of the edge between N and n1 or n2 is bigger than the cutoff, AND S1 and S2 are not included by each other. S1 is the unique sample list that all the offspring nodes of n1 comes from, similar for S2.       
+</li>
+</ul>
+
+<p>
+<img src="p7.hcluster.png" alt="p7.hcluster.png" /> <img src="p7.heatmap.hcluster.png" alt="p7.heatmap.hcluster.png" />
+</p>
+
+
+<p>
+Cluster match results were saved as file <a href="p7.cluster.map.csv">p7.cluster.map.csv</a> . The contents are
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">p7d</td>
+<td class="left">p7e</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">p7d_4</td>
+<td class="left">p7e_1</td>
+<td class="right">0.65</td>
+<td class="right">1</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">p7d_2</td>
+<td class="left">p7e_3;p7e_4</td>
+<td class="right">0.5</td>
+<td class="right">2</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">p7d_5</td>
+<td class="left">p7e_0;p7e_2</td>
+<td class="right">0.47</td>
+<td class="right">3</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">p7d_6</td>
+<td class="left">p7e_5</td>
+<td class="right">0.44</td>
+<td class="right">4</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">p7d_12</td>
+<td class="left">p7e_9</td>
+<td class="right">0.42</td>
+<td class="right">5</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">p7d_10</td>
+<td class="left">p7e_8</td>
+<td class="right">0.4</td>
+<td class="right">6</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">p7d_0;p7d_8</td>
+<td class="left">NA</td>
+<td class="right">0.34</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">p7d_7</td>
+<td class="left">p7e_6</td>
+<td class="right">0.33</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">p7d_11</td>
+<td class="left">p7e_7</td>
+<td class="right">0.29</td>
+<td class="right">9</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">p7d_1</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">p7d_3</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">11</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">p7d_9</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> Full run</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+Further more, besides the marker gene list, 
+if the Seurat object of sinlge dataset and combined dataset are provided, 
+the full analysis can be done.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">marker_file_list <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.markers.csv'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.markers.csv'</span>)
+
+fList <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.RDS'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.RDS'</span>, p7 = <span style="color: #8b2252;">'pre_analysis/p7.RDS'</span>)
+objList <span style="color: #008b8b;">&lt;-</span> lapply(fList, readRDS)
+
+single_obj_list <span style="color: #008b8b;">&lt;-</span> c(p7d = objList$p7d, p7e = objList$p7e)
+
+res <span style="color: #008b8b;">&lt;-</span> cluster_map(marker_file_list, edge_cutoff = 0.1, output = <span style="color: #8b2252;">'p7'</span>, single_obj_list = single_obj_list, comb_obj = objList$p7)
+res
+</pre>
+</div>
+
+<p>
+By calling "cluster_map" this way, Circos plot, re-colored t-SNE plot will be generated as following. 
+As well as the cell percentage change and sample separability of each new group.
+</p>
+
+<p>
+<b>Circos plot and population size</b>
+</p>
+
+<p>
+To visualized the results, we use Circos plot to summarize. <br  />
+</p>
+<ul class="org-ul">
+<li>The cords of the Circos plot indicate the linkage between the sub-groups. <br  />
+</li>
+<li>The percentage of cell numbers in each sample is represented by the width of the black sectors. 
+The sub-population size change is intuitive by comparing the sector size of matched (cord linked) groups. <br  />
+</li>
+<li>The color of the cords indicates different new groups, which matches the recolored t-SNE plot. <br  />
+</li>
+<li>The transparency of the cord color indicates the similarity of the matched groups. 
+</li>
+</ul>
+
+
+
+<div class="figure">
+<p><img src="p7.circos.png" alt="p7.circos.png" />
+</p>
+</div>
+
+<p>
+<b>Recolor</b> 
+</p>
+
+<p>
+For easy comparison, each sample and combined sample are recolored by their new groups after matching under t-SNE coordinates in the pre-analysis. 
+Cells belonging to the same new group in different samples are recolored in the same color. 
+Thus, some samples may miss one or more colors, which means no such group in the sample. 
+New groups will be saved as a list into RDS file, which can be used later.
+</p>
+
+
+<p>
+<img src="p7d.recolor.tsne.png" alt="p7d.recolor.tsne.png" /> 
+<img src="p7e.recolor.tsne.png" alt="p7e.recolor.tsne.png" />
+</p>
+
+<p>
+<img src="p7.recolor.tsne.png" alt="p7.recolor.tsne.png" /> 
+<img src="p7.color.by.sample.tsne.png" alt="p7.color.by.sample.tsne.png" />
+</p>
+
+
+<p>
+<b>Separability</b>
+</p>
+
+<p>
+After matching and regrouping, we estimate the condition effect on each paired groups besides the percentage change. 
+To quantify the difference between paired groups, separability was calculated for each new group.
+Separability will be generated pairwise if more than two samples. 
+</p>
+
+<p>
+For each new group, the separability is defined as the median difference of inna- and inter- sample distance of each cell in the combined t-SNE coordinates.
+The inna-sample distance is defined as the median distance of K-nearest cells of the same sample. Defualt K=5.
+The inter-sample distance is the same but cells of different sample. 
+</p>
+
+<p>
+Using median instead of mean will reduce the variation due to the outliners.
+The higher the more separable.
+</p>
+
+
+<p>
+<b>Map results</b>
+</p>
+
+<p>
+From the following results, we see that new group 2 and 4 are one to multiple match. 
+There is no matched groups for the new group 8, 10, 11, 12 at current cutoff.
+Both circos plot and recolored t-SNE plot showed the cell percentage change of the group 2, 4 and 9. 
+The separability of each new group further emerged the most affected sub-types, such as group 5, 7 and 4, 
+besides the no matched groups. 
+</p>
+
+<p>
+The full results were saved as in file <a href="p7.results.csv">p7.results.csv</a>
+</p>
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">p7d</td>
+<td class="left">p7e</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+<td class="right">p7d_cell_perc</td>
+<td class="left">p7e_cell_perc</td>
+<td class="right">p7d.vs.p7e_separability</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">p7d_4</td>
+<td class="left">p7e_1</td>
+<td class="right">0.65</td>
+<td class="right">1</td>
+<td class="right">0.11</td>
+<td class="left">0.18</td>
+<td class="right">0.85</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">p7d_2</td>
+<td class="left">p7e_3;p7e_4</td>
+<td class="right">0.5</td>
+<td class="right">2</td>
+<td class="right">0.14</td>
+<td class="left">0.14;0.1</td>
+<td class="right">0.34</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">p7d_5</td>
+<td class="left">p7e_0;p7e_2</td>
+<td class="right">0.47</td>
+<td class="right">3</td>
+<td class="right">0.08</td>
+<td class="left">0.2;0.15</td>
+<td class="right">2.93</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">p7d_6</td>
+<td class="left">p7e_5</td>
+<td class="right">0.44</td>
+<td class="right">4</td>
+<td class="right">0.06</td>
+<td class="left">0.07</td>
+<td class="right">0.99</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">p7d_12</td>
+<td class="left">p7e_9</td>
+<td class="right">0.42</td>
+<td class="right">5</td>
+<td class="right">0.01</td>
+<td class="left">0.02</td>
+<td class="right">0.03</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">p7d_10</td>
+<td class="left">p7e_8</td>
+<td class="right">0.4</td>
+<td class="right">6</td>
+<td class="right">0.02</td>
+<td class="left">0.04</td>
+<td class="right">10.56</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">p7d_0;p7d_8</td>
+<td class="left">NA</td>
+<td class="right">0.34</td>
+<td class="right">7</td>
+<td class="right">0.17;0.06</td>
+<td class="left">NA</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">p7d_7</td>
+<td class="left">p7e_6</td>
+<td class="right">0.33</td>
+<td class="right">8</td>
+<td class="right">0.06</td>
+<td class="left">0.05</td>
+<td class="right">7.13</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">p7d_11</td>
+<td class="left">p7e_7</td>
+<td class="right">0.29</td>
+<td class="right">9</td>
+<td class="right">0.01</td>
+<td class="left">0.05</td>
+<td class="right">0.53</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">p7d_1</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">10</td>
+<td class="right">0.15</td>
+<td class="left">NA</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">p7d_3</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">11</td>
+<td class="right">0.11</td>
+<td class="left">NA</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">p7d_9</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">12</td>
+<td class="right">0.02</td>
+<td class="left">NA</td>
+<td class="right">Inf</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> Known markers</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<p>
+Core basal genes: Krt14, Acta2, Myl9, Sparc, Mylk, Cxcl14 &#x2013; group 3, 4, 7, 8 <br  />
+Luminal genes: Elf5, Prlr, Areg, Ly6d, Stc2, Krt19 &#x2013; group 1, 11, 12, 9 <br  />
+ML cell-specific genes: Prlr, Cited1, Esrrb, and Cxcl15 &#x2013; group 2, 5, 6, 10
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(Seurat)
+
+FeaturePlot(object = objList$p7d, features.plot = c(<span style="color: #8b2252;">"Krt14"</span>, <span style="color: #8b2252;">"Acta2"</span>, <span style="color: #8b2252;">"Elf5"</span>, <span style="color: #8b2252;">"Prlr"</span>, <span style="color: #8b2252;">"Krt19"</span>,<span style="color: #8b2252;">"Pgr"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.p7d.png'</span>)
+
+FeaturePlot(object = objList$p7e, features.plot = c(<span style="color: #8b2252;">"Krt14"</span>, <span style="color: #8b2252;">"Acta2"</span>, <span style="color: #8b2252;">"Elf5"</span>, <span style="color: #8b2252;">"Prlr"</span>, <span style="color: #8b2252;">"Krt19"</span>,<span style="color: #8b2252;">"Pgr"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.p7e.png'</span>)
+</pre>
+</div>
+
+<p>
+P7D
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.p7d.png" alt="feature.gene.p7d.png" />
+</p>
+</div>
+
+<p>
+P7E
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.p7e.png" alt="feature.gene.p7e.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-1-4" class="outline-4">
+<h4 id="sec-2-1-4"><span class="section-number-4">2.1.4</span> Marker genes of new groups</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(Seurat)
+new.group.list <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'p7.new.group.list.rds'</span>)
+names(new.group.list)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">[1] "p7d"  "p7e"  "comb"</span>
+
+p7 <span style="color: #008b8b;">&lt;-</span> objList$p7
+p7@ident <span style="color: #008b8b;">&lt;-</span> new.group.list$comb
+TSNEPlot(object = p7, do.label = T, label.size = 6)
+
+p7.markers <span style="color: #008b8b;">&lt;-</span> FindAllMarkers(object = p7, only.pos = <span style="color: #228b22;">TRUE</span>, min.pct = 0.25, thresh.use = 0.25)
+write.csv(p7.markers, file = <span style="color: #8b2252;">'p7.new.group.markers.csv'</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">p7.markers.10.vs.12 &lt;- FindMarkers(object = p7, ident.1 = '10',ident.2 = '2', only.pos = F, min.pct = 0.25, min.diff.pct = 0.1, thresh.use = 0.25)</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">write.csv(p7.markers.10.vs.12,file = 'p7.markers.10.vs.12.csv')</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> More options</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+To custermized the analysis, step by step analysis could be performed.
+</p>
+</div>
+
+<div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> Try different singleton cutoff for cluster match.</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+The cutoff is the edge length cutoff for deciding if a singleton should be merged or not. 
+We suggest the cutoff is better to be less than 0.2.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">marker_file_list <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.markers.csv'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.markers.csv'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">cutoff 0.1</span>
+mapRes <span style="color: #008b8b;">&lt;-</span> cluster_map_by_marker(marker_file_list, cutoff = 0.1, output = <span style="color: #8b2252;">'p7'</span>)
+<span style="color: #b22222;">## </span><span style="color: #b22222;">cutoff 0.15</span>
+mapRes <span style="color: #008b8b;">&lt;-</span> cluster_map_by_marker(marker_file_list, cutoff = 0.15, output = <span style="color: #8b2252;">'p7_cutoff0.15'</span>)
+mapRes <span style="color: #b22222;">## </span><span style="color: #b22222;">results didn't change.</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">cutoff 0.2</span>
+mapRes <span style="color: #008b8b;">&lt;-</span> cluster_map_by_marker(marker_file_list, cutoff = 0.2, output = <span style="color: #8b2252;">'p7_cutoff0.2'</span>)
+mapRes <span style="color: #b22222;">## </span><span style="color: #b22222;">p7d_9 was grouped together with p7d_10 and p7e_8.</span>
+</pre>
+</div>
+
+<p>
+<b>cutoff = 0.2</b>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">p7d</td>
+<td class="left">p7e</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">p7d_4</td>
+<td class="left">p7e_1</td>
+<td class="right">0.65</td>
+<td class="right">1</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">p7d_2</td>
+<td class="left">p7e_3;p7e_4</td>
+<td class="right">0.50</td>
+<td class="right">2</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">p7d_5</td>
+<td class="left">p7e_0;p7e_2</td>
+<td class="right">0.47</td>
+<td class="right">3</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">p7d_6</td>
+<td class="left">p7e_5</td>
+<td class="right">0.44</td>
+<td class="right">4</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">p7d_12</td>
+<td class="left">p7e_9</td>
+<td class="right">0.42</td>
+<td class="right">5</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">p7d_0;p7d_8</td>
+<td class="left">NA</td>
+<td class="right">0.34</td>
+<td class="right">6</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">p7d_7</td>
+<td class="left">p7e_6</td>
+<td class="right">0.33</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">p7d_11</td>
+<td class="left">p7e_7</td>
+<td class="right">0.29</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">p7d_10;p7d_9</td>
+<td class="left">p7e_8</td>
+<td class="right">0.24</td>
+<td class="right">9</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">p7d_1</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">p7d_3</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">11</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> Use cell number information to generate circos plot.</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+The cell numbers for each sub-group can be pulled out from Seruat object or 
+provided by the user.
+cell_num_list is a list of vectors for each sample. Each vector contains the cell 
+numbers for each sub-group of the sample.
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">fList <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.RDS'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.RDS'</span>)
+objList <span style="color: #008b8b;">&lt;-</span> lapply(fList, readRDS)
+single_obj_list <span style="color: #008b8b;">&lt;-</span> c(p7d = objList$p7d, p7e = objList$p7e)
+
+cell_num_list <span style="color: #008b8b;">&lt;-</span> lapply(single_obj_list, <span style="color: #a020f0;">function</span>(obj) summary(obj@ident))
+
+mapRes <span style="color: #008b8b;">&lt;-</span> read.csv(<span style="color: #8b2252;">'p7.results.csv'</span>) <span style="color: #b22222;">## </span><span style="color: #b22222;">This file was auto-saved when cluster_map_by_marker function was run.</span>
+
+circos_map(mapRes, cell_num_list, output = <span style="color: #8b2252;">'p7'</span>)
+res <span style="color: #008b8b;">&lt;-</span> add_perc(mapRes, cell_num_list)
+res
+</pre>
+</div>
+
+<p>
+<b>Number of samples in circos plot</b>
+</p>
+
+<p>
+If there are more than 3 samples, the circos plot will become complicated. 
+We can choose a subset of samples to plot.
+To achieve this, just remove extra samples from the mapRes and cell_num_list variables.
+Then use circos_map to plot a subset.
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-3" class="outline-4">
+<h4 id="sec-2-2-3"><span class="section-number-4">2.2.3</span> Change colors in circos plot</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">fList <span style="color: #008b8b;">&lt;-</span> c(p7d = <span style="color: #8b2252;">'pre_analysis/p7d.RDS'</span>, p7e = <span style="color: #8b2252;">'pre_analysis/p7e.RDS'</span>)
+objList <span style="color: #008b8b;">&lt;-</span> lapply(fList, readRDS)
+single_obj_list <span style="color: #008b8b;">&lt;-</span> c(p7d = objList$p7d, p7e = objList$p7e)
+cell_num_list <span style="color: #008b8b;">&lt;-</span> lapply(single_obj_list, <span style="color: #a020f0;">function</span>(obj) summary(obj@ident))
+mapRes <span style="color: #008b8b;">&lt;-</span> read.csv(<span style="color: #8b2252;">'p7.results.csv'</span>)<span style="color: #b22222;">## </span><span style="color: #b22222;">This file was auto-saved when cluster_map_by_marker function was run.</span>
+
+<span style="color: #008b8b;">library</span>(RColorBrewer)
+circos_map(mapRes, cell_num_list, output = <span style="color: #8b2252;">'p7.tmp'</span>, color_cord = brewer.pal(n = 12, <span style="color: #8b2252;">'Paired'</span>))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="p7.tmp.circos.png" alt="p7.tmp.circos.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-4" class="outline-4">
+<h4 id="sec-2-2-4"><span class="section-number-4">2.2.4</span> Recolor one single sample in t-SNE plot</h4>
+<div class="outline-text-4" id="text-2-2-4">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">p7d <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'pre_analysis/p7d.RDS'</span>)
+mapRes <span style="color: #008b8b;">&lt;-</span> read.csv(<span style="color: #8b2252;">'p7.results.csv'</span>) <span style="color: #b22222;">## </span><span style="color: #b22222;">This file was auto-saved when cluster_map_by_marker function was run.</span>
+mapRes
+
+da <span style="color: #008b8b;">&lt;-</span> structure(as.vector(mapRes[, <span style="color: #8b2252;">'p7d'</span>]), names = mapRes$regroup)
+head(da)
+p7d.new.group <span style="color: #008b8b;">&lt;-</span> recolor_s(da, obj = p7d, output = <span style="color: #8b2252;">'p7d'</span>) <span style="color: #b22222;">## </span><span style="color: #b22222;">new group asignment of each cell is outputed as well.              </span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">custermized color</span>
+<span style="color: #008b8b;">library</span>(RColorBrewer)
+p7d.new.group <span style="color: #008b8b;">&lt;-</span> recolor_s(da, obj = p7d, output = <span style="color: #8b2252;">'p7d.tmp'</span>, color = brewer.pal(n = 12, <span style="color: #8b2252;">'Paired'</span>))
+
+
+p7e <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'pre_analysis/p7e.RDS'</span>)
+da <span style="color: #008b8b;">&lt;-</span> structure(as.vector(mapRes[, <span style="color: #8b2252;">'p7e'</span>]), names = mapRes$regroup)
+head(da)
+p7e.new.group <span style="color: #008b8b;">&lt;-</span> recolor_s(da, obj = p7e, output = <span style="color: #8b2252;">'p7e'</span>) <span style="color: #b22222;">## </span><span style="color: #b22222;">new group asignment of each cell is outputed as well.              </span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">custermized color</span>
+p7e.new.group <span style="color: #008b8b;">&lt;-</span> recolor_s(da, obj = p7e, output = <span style="color: #8b2252;">'p7e.tmp'</span>, color = brewer.pal(n = 12, <span style="color: #8b2252;">'Paired'</span>))
+</pre>
+</div>
+
+<p>
+<img src="p7d.tmp.recolor.tsne.png" alt="p7d.tmp.recolor.tsne.png" />
+<img src="p7e.tmp.recolor.tsne.png" alt="p7e.tmp.recolor.tsne.png" />
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2-5" class="outline-4">
+<h4 id="sec-2-2-5"><span class="section-number-4">2.2.5</span> Recolor combined sample in t-SNE plot</h4>
+<div class="outline-text-4" id="text-2-2-5">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">p7 <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'pre_analysis/p7.RDS'</span>)
+
+new_group_comb <span style="color: #008b8b;">&lt;-</span> recolor_comb(comb_obj = p7, new_group_list = list(p7d = p7d.new.group, p7e = p7e.new.group), output = <span style="color: #8b2252;">'p7'</span>, comb_delim = <span style="color: #8b2252;">'-'</span>) <span style="color: #b22222;">## </span><span style="color: #b22222;">new group list generated by recolor_s as in the previous code block.     </span>
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">custermized color</span>
+<span style="color: #008b8b;">library</span>(RColorBrewer)
+new_group_comb <span style="color: #008b8b;">&lt;-</span> recolor_comb(comb_obj = p7, new_group_list = list(p7d = p7d.new.group, p7e = p7e.new.group), output = <span style="color: #8b2252;">'p7.tmp'</span>, comb_delim = <span style="color: #8b2252;">'-'</span>, color = brewer.pal(n = 12, <span style="color: #8b2252;">'Paired'</span>))
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="p7.tmp.recolor.tsne.png" alt="p7.tmp.recolor.tsne.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-6" class="outline-4">
+<h4 id="sec-2-2-6"><span class="section-number-4">2.2.6</span> Adjust K for seperability</h4>
+<div class="outline-text-4" id="text-2-2-6">
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R">p7 <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'pre_analysis/p7.RDS'</span>)
+tsne_coord <span style="color: #008b8b;">&lt;-</span> as.data.frame(p7@dr$tsne@cell.embeddings)
+
+new_group_list <span style="color: #008b8b;">&lt;-</span> readRDS(<span style="color: #8b2252;">'p7.new.group.list.RDS'</span>)
+group <span style="color: #008b8b;">&lt;-</span> new_group_list$comb
+head(group)
+
+sample_label <span style="color: #008b8b;">&lt;-</span> as.factor(sub(<span style="color: #8b2252;">'-.*'</span>, <span style="color: #8b2252;">''</span>, names(group)))
+<span style="color: #b22222;">## </span><span style="color: #b22222;">k=5</span>
+sepa_k5 <span style="color: #008b8b;">&lt;-</span> separability_pairwise(tsne_coord, group, sample_label, k = 5)
+sepa_k5
+<span style="color: #b22222;">## </span><span style="color: #b22222;">k=10</span>
+sepa_k10 <span style="color: #008b8b;">&lt;-</span> separability_pairwise(tsne_coord, group, sample_label, k = 10)
+sepa_k10
+</pre>
+</div>
+
+<p>
+<b>k = 5</b>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">regroup</td>
+<td class="right">p7d.vs.p7e</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="right">0.85</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="right">0.34</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="right">2.93</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="right">0.99</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="right">0.03</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="right">10.56</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="right">7.13</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="right">0.53</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="right">Inf</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<b>k = 10</b>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">regroup</td>
+<td class="right">p7d.vs.p7e</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="right">0.98</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="right">0.42</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="right">3.75</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="right">1.00</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="right">-0.38</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="right">11.43</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="right">7.71</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="right">0.99</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="right">Inf</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> More case study</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Immune stimulated datasets</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+The dataset comes from this study:
+<a href="https://www.nature.com/articles/nbt.4042">https://www.nature.com/articles/nbt.4042</a> 
+</p>
+
+<p>
+A pool of peripheral blood mononuclear cells (PBMCs) from eight lupus patients was studied. 
+PBMCs from each patient were untreated as control or activated with recombinant interferon-beta IFN-beta for 6 hours.  
+14,619 cells for control and 14,446 cells for stimulated were obtained from 10X Chromium instrument sequencing. 
+</p>
+
+<p>
+<b>Pre-analysis by Seruat</b>
+</p>
+
+<p>
+<img src="pre_analysis/ctrl.tsne.png" alt="ctrl.tsne.png" />
+<img src="pre_analysis/stim.tsne.png" alt="stim.tsne.png" />
+</p>
+
+<p>
+<b>ClusterMap analysis</b>
+</p>
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(ClusterMap)
+
+marker_file_list <span style="color: #008b8b;">&lt;-</span> c(ctrl = <span style="color: #8b2252;">'pre_analysis/ctrl.markers.csv'</span>, stim = <span style="color: #8b2252;">'pre_analysis/stim.markers.csv'</span>)
+
+fList <span style="color: #008b8b;">&lt;-</span> c(ctrl = <span style="color: #8b2252;">"pre_analysis/ctrl.RDS"</span>,
+        stim = <span style="color: #8b2252;">"pre_analysis/stim.RDS"</span>,
+        comb = <span style="color: #8b2252;">"pre_analysis/immune.RDS"</span>)
+immuneList <span style="color: #008b8b;">&lt;-</span> lapply(fList, readRDS)
+
+single_obj_list <span style="color: #008b8b;">&lt;-</span> c(ctrl = immuneList$ctrl, stim = immuneList$stim)
+
+res <span style="color: #008b8b;">&lt;-</span> cluster_map(marker_file_list, edge_cutoff = 0.1, output = <span style="color: #8b2252;">'immune'</span>, single_obj_list = single_obj_list, comb_obj = immuneList$comb)
+res
+</pre>
+</div>
+
+<p>
+<b>Cluster match</b>
+</p>
+
+<p>
+<img src="immune.hcluster.png" alt="immune.hcluster.png" /> <img src="immune.heatmap.hcluster.png" alt="immune.heatmap.hcluster.png" />
+</p>
+
+
+<p>
+<b>Circos plot</b>
+</p>
+
+
+<div class="figure">
+<p><img src="immune.circos.png" alt="immune.circos.png" />
+</p>
+</div>
+
+<p>
+<b>Recolor</b>
+</p>
+
+<p>
+<img src="ctrl.recolor.tsne.png" alt="ctrl.recolor.tsne.png" /> 
+<img src="stim.recolor.tsne.png" alt="stim.recolor.tsne.png" />
+</p>
+
+<p>
+<img src="immune.recolor.tsne.png" alt="immune.recolor.tsne.png" />
+<img src="immune.color.by.sample.tsne.png" alt="immune.color.by.sample.tsne.png" />
+</p>
+
+<p>
+<b>Map results</b>
+</p>
+
+<p>
+<a href="immune.results.csv">immune.results.csv</a>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">ctrl</td>
+<td class="left">stim</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+<td class="right">ctrl_cell_perc</td>
+<td class="right">stim_cell_perc</td>
+<td class="right">ctrl.vs.stim_separability</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">ctrl_6</td>
+<td class="left">stim_6</td>
+<td class="right">0.6</td>
+<td class="right">1</td>
+<td class="right">0.04</td>
+<td class="right">0.04</td>
+<td class="right">0.24</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">ctrl_2</td>
+<td class="left">stim_2</td>
+<td class="right">0.53</td>
+<td class="right">2</td>
+<td class="right">0.12</td>
+<td class="right">0.11</td>
+<td class="right">0.55</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">ctrl_1</td>
+<td class="left">stim_1</td>
+<td class="right">0.5</td>
+<td class="right">3</td>
+<td class="right">0.18</td>
+<td class="right">0.21</td>
+<td class="right">0.78</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">ctrl_5</td>
+<td class="left">stim_4</td>
+<td class="right">0.49</td>
+<td class="right">4</td>
+<td class="right">0.08</td>
+<td class="right">0.07</td>
+<td class="right">5.01</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">ctrl_4</td>
+<td class="left">stim_3</td>
+<td class="right">0.48</td>
+<td class="right">5</td>
+<td class="right">0.09</td>
+<td class="right">0.11</td>
+<td class="right">0.55</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">ctrl_0;ctrl_8</td>
+<td class="left">stim_0;stim_11</td>
+<td class="right">0.45</td>
+<td class="right">6</td>
+<td class="right">0.31;0.02</td>
+<td class="right">0.28;0.01</td>
+<td class="right">11.03</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">ctrl_7</td>
+<td class="left">stim_8</td>
+<td class="right">0.39</td>
+<td class="right">7</td>
+<td class="right">0.03</td>
+<td class="right">0.03</td>
+<td class="right">7.05</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">ctrl_10</td>
+<td class="left">stim_10</td>
+<td class="right">0.34</td>
+<td class="right">8</td>
+<td class="right">0.01</td>
+<td class="right">0.01</td>
+<td class="right">0.55</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">ctrl_3</td>
+<td class="left">stim_5;stim_7</td>
+<td class="right">0.3</td>
+<td class="right">9</td>
+<td class="right">0.09</td>
+<td class="right">0.07;0.04</td>
+<td class="right">0.37</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">ctrl_9</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">10</td>
+<td class="right">0.02</td>
+<td class="right">NA</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">NA</td>
+<td class="left">stim_12</td>
+<td class="right">NA</td>
+<td class="right">11</td>
+<td class="right">NA</td>
+<td class="right">0</td>
+<td class="right">Inf</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">NA</td>
+<td class="left">stim_9</td>
+<td class="right">NA</td>
+<td class="right">12</td>
+<td class="right">NA</td>
+<td class="right">0.02</td>
+<td class="right">Inf</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+<b>Cell type and Known markers</b>
+</p>
+
+<p>
+cM, CD14+CD16- monocytes: CD14, LYZ &#x2014; group 6 <br  />
+ncM, CD14+CD16+ monocytes: FCGR3A, MS4A7 &#x2014; group 4 <br  />
+DC, dendritic cells: FCER1A, CST3 &#x2014; group 7 <br  />
+Mkc, megakaryocytes: PPBP &#x2014; group 10, 12 <br  />
+Th, CD4+ T cells: IL7R &#x2014; group 2, 3 <br  />
+B, B cells: MS4A1 &#x2014; group 5 <br  />
+Tc, CD8+ T cells: CD8A &#x2014; group 9 <br  />
+NK, natural killer cells: GNLY, NKG7 &#x2014; group 9
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(Seurat)
+
+FeaturePlot(object = immuneList$ctrl, features.plot = c(<span style="color: #8b2252;">"CD14"</span>,<span style="color: #8b2252;">"LYZ"</span>,<span style="color: #8b2252;">"FCGR3A"</span>,<span style="color: #8b2252;">"MS4A7"</span>,<span style="color: #8b2252;">"FCER1A"</span>,<span style="color: #8b2252;">"CST3"</span>,<span style="color: #8b2252;">"PPBP"</span>,<span style="color: #8b2252;">"IL7R"</span>,<span style="color: #8b2252;">"MS4A1"</span>,<span style="color: #8b2252;">"CD8A"</span>,<span style="color: #8b2252;">"GNLY"</span>,<span style="color: #8b2252;">"NKG7"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.ctrl.png'</span>)
+
+FeaturePlot(object = immuneList$stim, features.plot = c(<span style="color: #8b2252;">"CD14"</span>,<span style="color: #8b2252;">"LYZ"</span>,<span style="color: #8b2252;">"FCGR3A"</span>,<span style="color: #8b2252;">"MS4A7"</span>,<span style="color: #8b2252;">"FCER1A"</span>,<span style="color: #8b2252;">"CST3"</span>,<span style="color: #8b2252;">"PPBP"</span>,<span style="color: #8b2252;">"IL7R"</span>,<span style="color: #8b2252;">"MS4A1"</span>,<span style="color: #8b2252;">"CD8A"</span>,<span style="color: #8b2252;">"GNLY"</span>,<span style="color: #8b2252;">"NKG7"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.stim.png'</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FeaturePlot(object = all, features.plot = c("CD4","TBX21",'GATA3','SELL','CREM'), cols.use = c("grey", "blue"), reduction.use = "tsne")</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">savePlot('features.immune.png')</span>
+</pre>
+</div>
+
+<p>
+Control
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.ctrl.png" alt="feature.gene.ctrl.png" />
+</p>
+</div>
+
+<p>
+Stimulated
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.stim.png" alt="feature.gene.stim.png" />
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> PBMCs datasets</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+The dataset is downloaded from 10X Genomics single cell gene expression datasets:<br  />
+<a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k">https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k</a> <br  />
+<a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc8k">https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc8k</a>
+</p>
+
+<p>
+They are peripheral blood mononuclear cells (PBMCs) from the same healthy donor.
+</p>
+
+<p>
+<b>Pre-analysis</b>
+</p>
+
+<p>
+<img src="pre_analysis/pbmc4k.tsne.png" alt="pbmc4k.tsne.png" />
+<img src="pre_analysis/pbmc8k.tsne.png" alt="pbmc8k.tsne.png" />
+</p>
+
+<p>
+<b>ClusterMap analysis</b>
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(ClusterMap)
+
+marker_file_list <span style="color: #008b8b;">&lt;-</span> c(pbmc4k = <span style="color: #8b2252;">'pre_analysis/pbmc4k.markers.csv'</span>, pbmc8k = <span style="color: #8b2252;">'pre_analysis/pbmc8k.markers.csv'</span>)
+
+fList <span style="color: #008b8b;">&lt;-</span> c(pbmc4k = <span style="color: #8b2252;">'pre_analysis/pbmc4k.RDS'</span>,
+        pbmc8k = <span style="color: #8b2252;">'pre_analysis/pbmc8k.RDS'</span>,
+        pbmc = <span style="color: #8b2252;">"pre_analysis/pbmc.RDS"</span>)
+pbmcList <span style="color: #008b8b;">&lt;-</span> lapply(fList, readRDS)
+
+single_obj_list <span style="color: #008b8b;">&lt;-</span> c(pbmc4k = pbmcList$pbmc4k, pbmc8k = pbmcList$pbmc8k)
+
+res <span style="color: #008b8b;">&lt;-</span> cluster_map(marker_file_list, edge_cutoff = 0.1, output = <span style="color: #8b2252;">'pbmc'</span>, single_obj_list = single_obj_list, comb_obj = pbmcList$pbmc)
+res
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">marker genes</span>
+<span style="color: #008b8b;">library</span>(Seurat)
+
+FeaturePlot(object = pbmcList$pbmc4k, features.plot = c(<span style="color: #8b2252;">"CD14"</span>,<span style="color: #8b2252;">"LYZ"</span>,<span style="color: #8b2252;">"FCGR3A"</span>,<span style="color: #8b2252;">"MS4A7"</span>,<span style="color: #8b2252;">"FCER1A"</span>,<span style="color: #8b2252;">"CST3"</span>,<span style="color: #8b2252;">"PPBP"</span>,<span style="color: #8b2252;">"IL7R"</span>,<span style="color: #8b2252;">"MS4A1"</span>,<span style="color: #8b2252;">"CD8A"</span>,<span style="color: #8b2252;">"GNLY"</span>,<span style="color: #8b2252;">"NKG7"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.pbmc4k.png'</span>)
+
+FeaturePlot(object = pbmcList$pbmc8k, features.plot = c(<span style="color: #8b2252;">"CD14"</span>,<span style="color: #8b2252;">"LYZ"</span>,<span style="color: #8b2252;">"FCGR3A"</span>,<span style="color: #8b2252;">"MS4A7"</span>,<span style="color: #8b2252;">"FCER1A"</span>,<span style="color: #8b2252;">"CST3"</span>,<span style="color: #8b2252;">"PPBP"</span>,<span style="color: #8b2252;">"IL7R"</span>,<span style="color: #8b2252;">"MS4A1"</span>,<span style="color: #8b2252;">"CD8A"</span>,<span style="color: #8b2252;">"GNLY"</span>,<span style="color: #8b2252;">"NKG7"</span>), cols.use = c(<span style="color: #8b2252;">"grey"</span>, <span style="color: #8b2252;">"blue"</span>), reduction.use = <span style="color: #8b2252;">"tsne"</span>)
+savePlot(<span style="color: #8b2252;">'feature.gene.pbmc8k.png'</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">FeaturePlot(object = pbmcList$pbmc, features.plot = c("CD14","LYZ","FCGR3A","MS4A7","FCER1A","CST3","PPBP","IL7R","MS4A1","CD8A","GNLY","NKG7"), cols.use = c("grey", "blue"), reduction.use = "tsne")</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">savePlot('feature.gene.pbmc.png')</span>
+</pre>
+</div>
+
+<p>
+<b>Cluster match</b>
+</p>
+
+<p>
+<img src="pbmc.hcluster.png" alt="pbmc.hcluster.png" /> <img src="pbmc.heatmap.hcluster.png" alt="pbmc.heatmap.hcluster.png" />
+</p>
+
+
+<p>
+<b>Circos plot</b>
+</p>
+
+<p>
+The cord color in the circos plot is much darker, 
+indicating the high similarity of the matched groups. 
+</p>
+
+
+<div class="figure">
+<p><img src="pbmc.circos.png" alt="pbmc.circos.png" />
+</p>
+</div>
+
+<p>
+<b>Recolor</b>
+</p>
+
+<p>
+<img src="pbmc4k.recolor.tsne.png" alt="pbmc4k.recolor.tsne.png" />
+<img src="pbmc8k.recolor.tsne.png" alt="pbmc8k.recolor.tsne.png" />
+</p>
+
+<p>
+<img src="pbmc.recolor.tsne.png" alt="pbmc.recolor.tsne.png" />
+<img src="pbmc.color.by.sample.tsne.png" alt="pbmc.color.by.sample.tsne.png" />
+</p>
+
+<p>
+<b>Map results</b>
+</p>
+
+<p>
+Clear one-to-one match. Majority of the cell percentage of sub-types are not changed. 
+The separability shows that there is no obvious difference between the two samples in any of the matched pairs. 
+</p>
+
+<p>
+<a href="pbmc.results.csv">pbmc.results.csv</a>
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">pbmc4k</td>
+<td class="left">pbmc8k</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+<td class="right">pbmc4k_cell_perc</td>
+<td class="right">pbmc8k_cell_perc</td>
+<td class="right">pbmc4k.vs.pbmc8k_separability</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">pbmc4k_4</td>
+<td class="left">pbmc8k_6</td>
+<td class="right">0.83</td>
+<td class="right">1</td>
+<td class="right">0.1</td>
+<td class="right">0.09</td>
+<td class="right">-0.09</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">pbmc4k_6</td>
+<td class="left">pbmc8k_4</td>
+<td class="right">0.82</td>
+<td class="right">2</td>
+<td class="right">0.08</td>
+<td class="right">0.11</td>
+<td class="right">0.03</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">pbmc4k_2</td>
+<td class="left">pbmc8k_5</td>
+<td class="right">0.82</td>
+<td class="right">3</td>
+<td class="right">0.13</td>
+<td class="right">0.1</td>
+<td class="right">-0.01</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">pbmc4k_0</td>
+<td class="left">pbmc8k_0</td>
+<td class="right">0.79</td>
+<td class="right">4</td>
+<td class="right">0.19</td>
+<td class="right">0.16</td>
+<td class="right">-0.02</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">pbmc4k_3</td>
+<td class="left">pbmc8k_2</td>
+<td class="right">0.76</td>
+<td class="right">5</td>
+<td class="right">0.12</td>
+<td class="right">0.12</td>
+<td class="right">-0.08</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">pbmc4k_5</td>
+<td class="left">pbmc8k_3</td>
+<td class="right">0.76</td>
+<td class="right">6</td>
+<td class="right">0.09</td>
+<td class="right">0.12</td>
+<td class="right">-0.07</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">pbmc4k_10</td>
+<td class="left">pbmc8k_9</td>
+<td class="right">0.74</td>
+<td class="right">7</td>
+<td class="right">0.03</td>
+<td class="right">0.03</td>
+<td class="right">-0.08</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">pbmc4k_9</td>
+<td class="left">pbmc8k_10</td>
+<td class="right">0.71</td>
+<td class="right">8</td>
+<td class="right">0.03</td>
+<td class="right">0.03</td>
+<td class="right">-0.01</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">pbmc4k_8</td>
+<td class="left">pbmc8k_7</td>
+<td class="right">0.71</td>
+<td class="right">9</td>
+<td class="right">0.04</td>
+<td class="right">0.06</td>
+<td class="right">0.05</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">pbmc4k_1</td>
+<td class="left">pbmc8k_1</td>
+<td class="right">0.68</td>
+<td class="right">10</td>
+<td class="right">0.13</td>
+<td class="right">0.12</td>
+<td class="right">-0.08</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">pbmc4k_7</td>
+<td class="left">pbmc8k_8</td>
+<td class="right">0.66</td>
+<td class="right">11</td>
+<td class="right">0.04</td>
+<td class="right">0.06</td>
+<td class="right">0.05</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">pbmc4k_11</td>
+<td class="left">pbmc8k_12</td>
+<td class="right">0.61</td>
+<td class="right">12</td>
+<td class="right">0.01</td>
+<td class="right">0.01</td>
+<td class="right">-0.08</td>
+</tr>
+
+<tr>
+<td class="right">13</td>
+<td class="left">pbmc4k_12</td>
+<td class="left">pbmc8k_11</td>
+<td class="right">0.48</td>
+<td class="right">13</td>
+<td class="right">0.01</td>
+<td class="right">0.01</td>
+<td class="right">-0.02</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>
+<b>Known markers</b>
+</p>
+
+<p>
+PBMC4K
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.pbmc4k.png" alt="feature.gene.pbmc4k.png" />
+</p>
+</div>
+
+<p>
+PBMC8K
+</p>
+
+
+<div class="figure">
+<p><img src="feature.gene.pbmc8k.png" alt="feature.gene.pbmc8k.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Simulated data</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+We generate a random tree with 4 samples and 10 sub-groups in each sample to test our tree cut algorithm. 
+</p>
+
+<div class="org-src-container">
+<label class="org-src-name">code</label>
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(ape)
+set.seed(1) 
+tree <span style="color: #008b8b;">&lt;-</span> rcoal(40, tip.label = paste0(c(<span style="color: #8b2252;">'A'</span>, <span style="color: #8b2252;">'B'</span>, <span style="color: #8b2252;">'C'</span>, <span style="color: #8b2252;">'D'</span>), <span style="color: #8b2252;">'_'</span>, rep(1:10, each = 4)), br = runif(80, min = 0, max = 0.02))
+<span style="color: #b22222;">## </span><span style="color: #b22222;">plot(tree, edge.width = 2, label.offset = 0.01)</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">nodelabels()</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">tiplabels()</span>
+<span style="color: #b22222;">## </span><span style="color: #b22222;">axisPhylo(side = 1)</span>
+saveRDS(tree, file = <span style="color: #8b2252;">'simulated.tree.RDS'</span>)
+
+hc = as.hclust.phylo(tree)
+
+png(<span style="color: #8b2252;">'simulated.tree.png'</span>)
+plot(hc)
+dev.off()
+
+res <span style="color: #008b8b;">&lt;-</span> purity_cut(hc, cutoff = 0.1)
+write.csv(res, file = <span style="color: #8b2252;">'simulated.c0.1.results.csv'</span>)
+
+res <span style="color: #008b8b;">&lt;-</span> purity_cut(hc, cutoff = 0.2)
+write.csv(res, file = <span style="color: #8b2252;">'simulated.c0.2.results.csv'</span>)
+</pre>
+</div>
+
+
+<div class="figure">
+<p><img src="simulated.tree.png" alt="simulated.tree.png" />
+</p>
+</div>
+
+<p>
+cutoff = 0.1
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">A</td>
+<td class="left">B</td>
+<td class="left">C</td>
+<td class="left">D</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">NA</td>
+<td class="left">B_3</td>
+<td class="left">C_7</td>
+<td class="left">NA</td>
+<td class="right">0.99</td>
+<td class="right">1</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">A_9;A_5</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">0.96</td>
+<td class="right">2</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">A_6</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_4</td>
+<td class="right">0.93</td>
+<td class="right">3</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">A_1</td>
+<td class="left">B_8</td>
+<td class="left">NA</td>
+<td class="left">D_10</td>
+<td class="right">0.88</td>
+<td class="right">4</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">C_6;C_5</td>
+<td class="left">NA</td>
+<td class="right">0.84</td>
+<td class="right">5</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">NA</td>
+<td class="left">B_2</td>
+<td class="left">NA</td>
+<td class="left">D_1</td>
+<td class="right">0.81</td>
+<td class="right">6</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">A_4</td>
+<td class="left">B_1</td>
+<td class="left">C_9;C_8</td>
+<td class="left">NA</td>
+<td class="right">0.8</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">A_10</td>
+<td class="left">B_5</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">0.77</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">NA</td>
+<td class="left">B_4</td>
+<td class="left">C_4</td>
+<td class="left">NA</td>
+<td class="right">0.72</td>
+<td class="right">9</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">NA</td>
+<td class="left">B_9;B_10</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">0.68</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">C_10</td>
+<td class="left">D_2</td>
+<td class="right">0.55</td>
+<td class="right">11</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">A_8</td>
+<td class="left">B_6</td>
+<td class="left">C_3;C_1</td>
+<td class="left">NA</td>
+<td class="right">0.43</td>
+<td class="right">12</td>
+</tr>
+
+<tr>
+<td class="right">13</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_9</td>
+<td class="right">NA</td>
+<td class="right">13</td>
+</tr>
+
+<tr>
+<td class="right">14</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_6</td>
+<td class="right">NA</td>
+<td class="right">14</td>
+</tr>
+
+<tr>
+<td class="right">15</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_7</td>
+<td class="right">NA</td>
+<td class="right">15</td>
+</tr>
+
+<tr>
+<td class="right">16</td>
+<td class="left">A_7</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">16</td>
+</tr>
+
+<tr>
+<td class="right">17</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_5</td>
+<td class="right">NA</td>
+<td class="right">17</td>
+</tr>
+
+<tr>
+<td class="right">18</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_3</td>
+<td class="right">NA</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="right">19</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_8</td>
+<td class="right">NA</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="right">20</td>
+<td class="left">A_2</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="right">21</td>
+<td class="left">A_3</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">21</td>
+</tr>
+
+<tr>
+<td class="right">22</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">C_2</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">22</td>
+</tr>
+
+<tr>
+<td class="right">23</td>
+<td class="left">NA</td>
+<td class="left">B_7</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">23</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+cutoff = 0.2
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides" class="dataTable">
+
+
+<colgroup>
+<col  class="right" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<tbody>
+<tr>
+<td class="right">n</td>
+<td class="left">A</td>
+<td class="left">B</td>
+<td class="left">C</td>
+<td class="left">D</td>
+<td class="right">similarity</td>
+<td class="right">regroup</td>
+</tr>
+
+<tr>
+<td class="right">1</td>
+<td class="left">NA</td>
+<td class="left">B_3</td>
+<td class="left">C_7</td>
+<td class="left">NA</td>
+<td class="right">0.99</td>
+<td class="right">1</td>
+</tr>
+
+<tr>
+<td class="right">2</td>
+<td class="left">A_9;A_5</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">0.96</td>
+<td class="right">2</td>
+</tr>
+
+<tr>
+<td class="right">3</td>
+<td class="left">A_6</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_4</td>
+<td class="right">0.93</td>
+<td class="right">3</td>
+</tr>
+
+<tr>
+<td class="right">4</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">C_6;C_5</td>
+<td class="left">NA</td>
+<td class="right">0.84</td>
+<td class="right">4</td>
+</tr>
+
+<tr>
+<td class="right">5</td>
+<td class="left">A_4</td>
+<td class="left">B_1</td>
+<td class="left">C_9;C_8</td>
+<td class="left">NA</td>
+<td class="right">0.8</td>
+<td class="right">5</td>
+</tr>
+
+<tr>
+<td class="right">6</td>
+<td class="left">NA</td>
+<td class="left">B_4</td>
+<td class="left">C_4</td>
+<td class="left">NA</td>
+<td class="right">0.72</td>
+<td class="right">6</td>
+</tr>
+
+<tr>
+<td class="right">7</td>
+<td class="left">A_1</td>
+<td class="left">B_9;B_10;B_8</td>
+<td class="left">NA</td>
+<td class="left">D_5;D_10;D_3</td>
+<td class="right">0.61</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="right">8</td>
+<td class="left">A_10</td>
+<td class="left">B_5</td>
+<td class="left">NA</td>
+<td class="left">D_9</td>
+<td class="right">0.6</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="right">9</td>
+<td class="left">NA</td>
+<td class="left">B_2</td>
+<td class="left">C_10</td>
+<td class="left">D_6;D_1;D_7;D_2</td>
+<td class="right">0.51</td>
+<td class="right">9</td>
+</tr>
+
+<tr>
+<td class="right">10</td>
+<td class="left">A_8</td>
+<td class="left">B_6</td>
+<td class="left">C_3;C_1</td>
+<td class="left">NA</td>
+<td class="right">0.43</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="right">11</td>
+<td class="left">A_7</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">11</td>
+</tr>
+
+<tr>
+<td class="right">12</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">D_8</td>
+<td class="right">NA</td>
+<td class="right">12</td>
+</tr>
+
+<tr>
+<td class="right">13</td>
+<td class="left">A_2</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">13</td>
+</tr>
+
+<tr>
+<td class="right">14</td>
+<td class="left">A_3</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">14</td>
+</tr>
+
+<tr>
+<td class="right">15</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="left">C_2</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">15</td>
+</tr>
+
+<tr>
+<td class="right">16</td>
+<td class="left">NA</td>
+<td class="left">B_7</td>
+<td class="left">NA</td>
+<td class="left">NA</td>
+<td class="right">NA</td>
+<td class="right">16</td>
+</tr>
+</tbody>
+</table>
+
+
+
+<p>
+R version 3.4.3 (2017-11-30)
+</p>
+
+<p>
+Seurat_2.2.1
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Xin Gao</p>
+<p class="date">Created: 2018-05-22 Tue 18:03</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.4 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
